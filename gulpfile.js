@@ -5,6 +5,7 @@ var browserify = require('browserify');
 var gulp = require('gulp');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
+var uglify = require('gulp-uglify');
 var sourcemaps = require('gulp-sourcemaps');
 var gutil = require('gulp-util');
 var bowerResolve = require('bower-resolve');
@@ -50,16 +51,19 @@ gulp.task('build-vendor', function () {
   });
 
   return b.bundle()
-         .pipe(source('vendor.js'))         
+         .pipe(source('vendor.js')) 
+         .pipe(buffer())
+         .pipe(gulpif(production,uglify()))        
          .pipe(gulp.dest('./dist/js'));
 
 });
 
 gulp.task('build-app', function () {
 
-  var b = browserify('./src/js/main.js', {
+  var b = browserify({
     // generate source maps in non-production environment
-    debug: !production
+     entries: './src/js/main.js',
+     debug: !production
   });
 
   // mark vendor libraries defined in bower.json as an external library,
@@ -81,7 +85,7 @@ gulp.task('build-app', function () {
         .pipe(source('main.js'))
         .pipe(buffer())
         .pipe(gulpif(!production,sourcemaps.init({loadMaps: true})))
-        
+        .pipe(gulpif(production,uglify()))
         .on('error', gutil.log)
         .pipe(gulpif(!production,sourcemaps.write('./')))
 

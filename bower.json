@@ -1,0 +1,21 @@
+{
+  "name": "buzz",
+  "version": "1.0.0",
+  "homepage": "https://github.com/MontieraTech/buzz",
+  "authors": [
+    "eran-montiera <eran@montiera.com>"
+  ],
+  "description": "buzz site",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "src/js/vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4"
+  }
+}

@@ -11,6 +11,9 @@ var gutil = require('gulp-util');
 var bowerResolve = require('bower-resolve');
 var nodeResolve = require('resolve');
 var gulpif = require('gulp-if');
+var nodemon = require('gulp-nodemon');
+var browserSync = require('browser-sync');
+var reload = browserSync.reload;
 
 var production = (process.env.NODE_ENV === 'production');
 
@@ -58,46 +61,19 @@ gulp.task('build-vendor', function () {
 
 });
 
-gulp.task('build-app', function () {
-
-  var b = browserify({
-    // generate source maps in non-production environment
-     entries: './src/js/main.js',
-     debug: !production
-  });
-
-  // mark vendor libraries defined in bower.json as an external library,
-  // so that it does not get bundled with app.js.
-  // instead, we will load vendor libraries from vendor.js bundle
-  getBowerPackageIds().forEach(function (lib) {
-    b.external(lib);
-  });
-
-
-  // do the similar thing, but for npm-managed modules.
-  // resolve path using 'resolve' module
-  getNPMPackageIds().forEach(function (id) {
-    b.external(id);
-  });
-
-  return b.bundle()
-        
-        .pipe(source('main.js'))
-        .pipe(buffer())
-        .pipe(gulpif(!production,sourcemaps.init({loadMaps: true})))
-        .pipe(gulpif(production,uglify()))
-        .on('error', gutil.log)
-        .pipe(gulpif(!production,sourcemaps.write('./')))
-
-        .pipe(gulp.dest('./dist/js'));
-
-
-});
+gulp.task('build-app', buildAppJs);
 
 
 gulp.task("watch-js",function(){
 
-    return gulp.watch(['./src/js/**/*','./src/js/!(vendor)/**/*.js'],['build-app'])
+    return gulp.watch(['./src/js/**/*.*','./src/js/!(vendor)/**/*.js'],function(){
+
+       gutil.log(gutil.colors.magenta('js changed - rebuilding...')); 
+       return buildAppJs().pipe(reload({stream: true}));
+        
+        
+
+    });
 
 });
 
@@ -113,11 +89,44 @@ gulp.task("html",function(){
 gulp.task("build",["build-vendor","build-app","html"]);
 
 
-gulp.task("default",["watch-js"]);
+gulp.task("watch",["watch-js"]);
+
+gulp.task("default",["watch","browser-sync"]);
 
 /**
- * Helper function(s)
+ * Helper function(s) ---
  */
+
+
+gulp.task('browser-sync', ['nodemon'], function() {
+    browserSync({
+    proxy: "localhost:8080",  // local node app address
+    port: 5000,  // use *different* port than above
+    notify: true
+  });
+});
+
+gulp.task('nodemon', function (cb) {
+  var called = false;
+  return nodemon({
+                  script: './server/server.js',
+                  ignore : ["src/","gulpfile.js","dist/","node_modules/"],
+                  env: { 'NODE_ENV': 'development'} 
+   })
+   .on('start', function () {
+      if (!called) {
+        called = true; //* *******
+        cb();
+      }
+   })
+   .on('restart', function () {
+    setTimeout(function () {
+      reload({ stream: false });
+    }, 1000);
+  });
+});
+
+
 
 function getBowerPackageIds() {
   // read bower.json and get dependencies' package ids
@@ -141,5 +150,40 @@ function getNPMPackageIds() {
     // does not have a package.json manifest
   }
   return Object.keys(packageManifest.dependencies) || [];
+
+}
+
+
+function buildAppJs(cb){
+
+    
+   var b = browserify({
+    // generate source maps in non-production environment
+     entries: './src/js/main.js',
+     debug: !production
+  });
+
+  // mark vendor libraries defined in bower.json as an external library,
+  // so that it does not get bundled with app.js.
+  // instead, we will load vendor libraries from vendor.js bundle
+  getBowerPackageIds().forEach(function (lib) {
+    b.external(lib);
+  });
+
+
+  // do the similar thing, but for npm-managed modules.
+  // resolve path using 'resolve' module
+  getNPMPackageIds().forEach(function (id) {
+    b.external(id);
+  });
+
+  return b.bundle()       
+        .pipe(source('main.js'))
+        .pipe(buffer())
+        .pipe(gulpif(!production,sourcemaps.init({loadMaps: true})))
+        .pipe(gulpif(production,uglify()))
+        .on('error', gutil.log)
+        .pipe(gulpif(!production,sourcemaps.write('./')))
+        .pipe(gulp.dest('./dist/js'));
 
 }

@@ -9,7 +9,7 @@ var Test = React.createClass({
   render : function(){
 
 
-  	 return (<div>Hello world {this.props.name}</div>);
+  	 return (<span>Hello {this.props.name}!</span>);
 
   }
 

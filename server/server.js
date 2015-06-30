@@ -5,8 +5,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
+//var routes = require('./routes/index');
+var videosMngr = require('./routes/videosmngr');
 
 var app = express();
 
@@ -28,7 +28,7 @@ app.use(express.static(path.join(__dirname, '../dist')));
 
 
 
-app.use("/users",users);
+app.use("/videos",videosMngr);
 
 
 
@@ -64,4 +64,11 @@ app.use(function(err, req, res, next) {
 });
 
 
-app.listen(8080);
+var port = process.env.port || 5000;
+
+
+app.listen(port,function(){
+
+   console.log("server is listening on port:",port);
+
+});

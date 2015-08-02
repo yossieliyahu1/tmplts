@@ -12,8 +12,9 @@ var bowerResolve = require('bower-resolve');
 var nodeResolve = require('resolve');
 var gulpif = require('gulp-if');
 var nodemon = require('gulp-nodemon');
-var browserSync = require('browser-sync');
-var reload = browserSync.reload;
+var useref = require('gulp-useref');
+//var browserSync = require('browser-sync');
+//var reload = browserSync.reload;
 
 var production = (process.env.NODE_ENV === 'production');
 
@@ -69,19 +70,38 @@ gulp.task("watch-js",function(){
     return gulp.watch(['./src/js/**/*.*','./src/js/!(vendor)/**/*.js'],function(){
 
        gutil.log(gutil.colors.magenta('js changed - rebuilding...')); 
-       return buildAppJs().pipe(reload({stream: true}));
-        
-        
-
+       return buildAppJs();//.pipe(reload({stream: true}));
     });
+});
+
+gulp.task("css", function () {
+
+	gulp.src(['./src/css/**/*.*'])
+          .pipe(gulp.dest("./dist/css"));
+
+	var assets = useref.assets();
+	return gulp.src("./src/index.html")
+			.pipe(assets)
+			.pipe(assets.restore())
+			.pipe(useref())
+			.pipe(gulp.dest("./dist"));
 
 });
 
+gulp.task("watch-css", function () {
+
+	return gulp.watch(['./src/css/**/*.*'], ["css"]);
+});
 
 gulp.task("html",function(){
 
-    return gulp.src("./src/index.html")
-          .pipe(gulp.dest("./dist"));
+	var assets = useref.assets();
+
+	return gulp.src("./src/index.html")
+			.pipe(assets)
+			.pipe(assets.restore())
+			.pipe(useref())
+			.pipe(gulp.dest("./dist"));
 
 });
 
@@ -89,41 +109,41 @@ gulp.task("html",function(){
 gulp.task("build",["build-vendor","build-app","html"]);
 
 
-gulp.task("watch",["watch-js"]);
+gulp.task("watch",["watch-js","watch-css"]);
 
-gulp.task("default",["watch","browser-sync"]);
+gulp.task("default", ["watch", 'nodemon', "html"]);  //  /*,"browser-sync" */
 
 /**
  * Helper function(s) ---
  */
 
 
-gulp.task('browser-sync', ['nodemon'], function() {
+/*gulp.task('browser-sync', ['nodemon'], function() {
     browserSync({
     proxy: "localhost:8080",  // local node app address
     port: 5000,  // use *different* port than above
     notify: true
   });
-});
+}); */
 
 gulp.task('nodemon', function (cb) {
   var called = false;
   return nodemon({
-                  script: './server/server.js',
-                  ignore : ["src/","gulpfile.js","dist/","node_modules/"],
-                  env: { 'NODE_ENV': 'development'} 
-   })
+  	script: './server/server.js',
+  	ignore : ["src/","gulpfile.js","dist/","node_modules/"],
+  	env: { 'NODE_ENV': 'development'} 
+  })
    .on('start', function () {
-      if (!called) {
-        called = true; //* *******
-        cb();
-      }
-   })
-   .on('restart', function () {
+   	if (!called) {
+   		called = true; //* *******
+   		cb();
+   	}
+   });
+  /* .on('restart', function () {
     setTimeout(function () {
       reload({ stream: false });
     }, 1000);
-  });
+  }); */
 });
 
 

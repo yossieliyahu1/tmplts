@@ -63,12 +63,4 @@ app.use(function(err, req, res, next) {
   });
 });
 
-
-var port = process.env.port || 5000;
-
-
-app.listen(port,function(){
-
-   console.log("server is listening on port:",port);
-
-});
+app.listen(3221);

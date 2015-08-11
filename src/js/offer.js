@@ -16,7 +16,7 @@ var WideOffer = React.createClass( {
     
 	handleClick : function (){
 		try{
-			SWU.rpt("clk", this.props.data.meta.feed, "wide-offer");
+			// SWU.rpt("clk", this.props.data.meta.feed, "wide-offer");
 			window.open(this.props.data.lnk);
 		}
 		catch(e){}
@@ -29,8 +29,8 @@ var WideOffer = React.createClass( {
 
 		var id = "offer" + Math.floor(Math.random() * 100000);
 		
-		return <div className="row wow fadeInLeft" id={id} draggable="true" className="myDrgbl" onClick={this.handleClick} >
-					<div className="wide-offer col-md-9">
+		return <div className="row wow fadeInLeft myDrgbl" id={id} draggable="true" onClick={this.handleClick} >
+					<div className="wide-offer col-md-12">
 						
 						<div className="image col-md-1"><img src={img} /></div>
 
@@ -44,6 +44,7 @@ var WideOffer = React.createClass( {
 								}        
 							</div>
 						</div>
+
 					</div>
 				</div>
 	}

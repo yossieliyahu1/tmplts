@@ -1,19 +1,21 @@
 ﻿
 .wide-offer {
-	height:100px;
+	/*height:100px;*/
 	overflow:hidden;
 	padding:0;
 	margin:0;
 }
 
 .wide-offer .image {
+	/*
 	width:200px;
 	height:100px;
+		*/
 }
 
 .wide-offer .image img {
-	max-width:200px;
-	max-height:100px;
+	/*max-width:200px;
+	max-height:100px;*/
 }
 
 .wide-offer .title {

@@ -34,7 +34,7 @@ var dragDrop = {
 
 	dragstart: function (event) {
 		event.dataTransfer.effectAllowed = 'move';
-		dragDrop.crntDrgblId = event.target.id;
+		dragDrop.crntDrgblId = event.currentTarget.id;
 	},
 
 	drag: function (event) {

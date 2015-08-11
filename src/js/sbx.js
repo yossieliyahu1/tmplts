@@ -21,9 +21,19 @@ var SBX = React.createClass( {
 
 var Searched = React.createClass( {
 
+	propLen : 0,
+
 	handleClick : function (e) {
 		var st = e.target.innerText;
 		this.props.hndlr.search(st);
+	},
+
+	shouldComponentUpdate: function(nextProps, nextState) {
+		if(nextProps.terms.length > this.propLen){
+			this.propLen = nextProps.terms.length;
+			return true;
+		}
+		return false;
 	},
 
 	render: function () {

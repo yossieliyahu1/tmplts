@@ -6,15 +6,19 @@
 	<link href="../css/bootstrap.min.css" rel="stylesheet" />
 
   <!-- sidebar A 
-  <link href="../css/sidebarA.css" rel="stylesheet" />
+  <link href="../css/components/sidebarA.css" rel="stylesheet" />
   <link href="../css/pdsa-sidebar.css" rel="stylesheet" />
   <link href="../css/pdsa-summary-block.css" rel="stylesheet" />
   <link href="../css/pdsa-readme-box.css" rel="stylesheet" />
   end of sidebar A -->
 
   <!-- sidebar B 
-  <link href="../css/sidebarB.css" rel="stylesheet" />
+  <link href="../css/components/sidebarB.css" rel="stylesheet" />
   end of sidebar B -->
+
+	<!-- sidebar C --> 
+  <link href="../css/components/sidebarC.css" rel="stylesheet" />
+  <!-- end of sidebar C -->
 
 </head>
 <body>
@@ -25,7 +29,7 @@
 	<!------------------------------------------------------------------------------------------------->
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-md-2 col-md-offset-2" style="height:400px;">
+			<div class="col-md-2 col-md-offset-2"> <!-- style="height:400px;" -->
 				<!-- sidebar A 
 				
 					* may need <body class="notransition"> 
@@ -108,12 +112,11 @@
 		</div>
 	</div>
 	<!------------------------------------------------------------------------------------------------->
-	<!------------------------------------------------------------------------------------------------->
+	<!------------------------------------  sidebar B   ------------------------------------------------>
 	<!------------------------------------------------------------------------------------------------->
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-md-2 col-md-offset-2 sidebar" style="height:500px">
-
+			<div class="col-md-2 col-md-offset-2 sidebar"><!-- style="height:500px;" -->
 				<!-- sidebar B 
 				
 					* may need <body class="notransition"> 
@@ -140,6 +143,24 @@
 			</div>
 		</div>
 	</div>
+	<!------------------------------------------------------------------------------------------------->
+	<!------------------------------------  sidebar C   ------------------------------------------------>
+	<!------------------------------------------------------------------------------------------------->
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-2 col-md-offset-2 sidebar">
+				<div class="list-group">
+					<a href="#" class="list-group-item active">Link</a>
+					<a href="#" class="list-group-item">Link</a>
+					<a href="#" class="list-group-item">Link</a>
+					<a href="#" class="list-group-item">Link</a>
+					<a href="#" class="list-group-item">Link</a>
+					<a href="#" class="list-group-item">Link</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
 
 
 	<script src="../js/common/jquery-1.11.0.min.js"></script>
@@ -152,6 +173,10 @@
 	<!-- sidebar B 
 	<script src="../js/components/sidebarB.js"></script>
 	 end of sidebar B -->
+
+	<!-- sidebar C -->
+	<script src="../js/components/sidebarC.js"></script>
+	<!-- end of sidebar C -->
 	
 </body>
 </html>
